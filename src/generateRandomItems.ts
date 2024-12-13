@@ -1,7 +1,7 @@
-import { GanttItem } from "../Gantt";
-import { TimeRange } from "./getTimeSequence";
+import { Item } from "./App";
+import { TimeRange } from "./components/Gantt/utils/getTimeSequence";
 
-const GANTT_TYPES = [
+const TYPES = [
   "Everyone",
   "D0",
   "D1",
@@ -56,12 +56,12 @@ const generateValueForType = (type: string): string => {
 export function generateRandomItems(
   timeRange: TimeRange,
   itemCount: number
-): GanttItem[] {
-  const ganttItems: GanttItem[] = [];
+): Item[] {
+  const items: Item[] = [];
   const { start, end } = timeRange;
 
   for (let i = 0; i < itemCount; i++) {
-    const type = GANTT_TYPES[Math.floor(Math.random() * GANTT_TYPES.length)];
+    const type = TYPES[Math.floor(Math.random() * TYPES.length)];
 
     const itemDuration = Math.floor(Math.random() * (7 * 24 * 60 * 60 * 1000)); // Up to 7 days
     const maxStartTime = end - itemDuration;
@@ -70,7 +70,7 @@ export function generateRandomItems(
     );
     const itemEnd = itemStart + itemDuration;
 
-    ganttItems.push({
+    items.push({
       timeRange: {
         start: itemStart,
         end: itemEnd,
@@ -80,5 +80,5 @@ export function generateRandomItems(
     });
   }
 
-  return ganttItems.sort((a, b) => a.timeRange.start - b.timeRange.start);
+  return items.sort((a, b) => a.timeRange.start - b.timeRange.start);
 }

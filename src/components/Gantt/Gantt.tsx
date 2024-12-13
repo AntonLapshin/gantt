@@ -1,6 +1,6 @@
 import { getTimeSequence, TimeRange, TimeUnit } from "./utils/getTimeSequence";
 import classes from "./Gantt.module.scss";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useDraggable } from "react-use-draggable-scroll";
 import classNames from "classnames";
 import { isCurrent } from "./utils/isCurrent";
@@ -12,30 +12,31 @@ import { getSubrows } from "./utils/getSubrows";
 export type GanttItem = {
   timeRange: TimeRange;
   type: string;
-  value: string;
 };
 
-type GanttProps = {
+type GanttProps<T> = {
   controlRef: any;
   timeRange: TimeRange;
-  items: GanttItem[];
+  items: T[];
   timeUnit: TimeUnit;
   colWidth?: number;
   firstColWidth?: number;
+  ItemComponent: React.FC<{ item: T }>;
 };
 
 export type GanttApi = {
   scrollToNow: () => void;
 };
 
-export const Gantt = ({
+export function Gantt<T extends GanttItem>({
   controlRef = useRef<GanttApi | undefined>(),
   timeRange,
   items,
   timeUnit,
   firstColWidth = 120,
   colWidth = 120,
-}: GanttProps) => {
+  ItemComponent,
+}: GanttProps<T>) {
   timeRange = roundTimeRange(timeRange, timeUnit);
 
   const ganttRef = useRef();
@@ -70,7 +71,7 @@ export const Gantt = ({
     }
     acc[item.type].push(item);
     return acc;
-  }, {} as Record<string, GanttItem[]>);
+  }, {} as Record<string, T[]>);
 
   const timelineLeft = toPx(Date.now());
 
@@ -165,7 +166,7 @@ export const Gantt = ({
                           width: end - start,
                         }}
                       >
-                        {item.value}
+                        <ItemComponent item={item} />
                       </div>
                     );
                   })}
@@ -194,4 +195,4 @@ export const Gantt = ({
       </div>
     </div>
   );
-};
+}

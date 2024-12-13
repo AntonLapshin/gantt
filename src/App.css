@@ -3,3 +3,18 @@ body {
   margin: 0;
   padding: 0;
 }
+
+.item {
+  border-radius: 0.25rem;
+  box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e2e2;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  height: 100%;
+}
+
+.item:hover {
+  background-color: #f6f6f6;
+}

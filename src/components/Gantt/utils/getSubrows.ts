@@ -5,12 +5,12 @@ export function isOverlapping(range1: TimeRange, range2: TimeRange): boolean {
   return !(range1.end <= range2.start || range1.start >= range2.end);
 }
 
-export function getSubrows(items: GanttItem[]): GanttItem[][] {
+export function getSubrows<T extends GanttItem>(items: T[]): T[][] {
   const sortedItems = items.sort(
     (a, b) => a.timeRange.start - b.timeRange.start
   );
 
-  const subrows: GanttItem[][] = [];
+  const subrows: T[][] = [];
 
   for (const item of sortedItems) {
     let placed = false;

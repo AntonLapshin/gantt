@@ -20,7 +20,6 @@ const GANTT_TYPES = [
   "D3 50-100",
 ];
 
-// Function to generate random value based on type
 const generateValueForType = (type: string): string => {
   const prefixes = [
     "Project",
@@ -62,10 +61,8 @@ export function generateRandomItems(
   const { start, end } = timeRange;
 
   for (let i = 0; i < itemCount; i++) {
-    // Select a random type
     const type = GANTT_TYPES[Math.floor(Math.random() * GANTT_TYPES.length)];
 
-    // Generate a random time range within the given range
     const itemDuration = Math.floor(Math.random() * (7 * 24 * 60 * 60 * 1000)); // Up to 7 days
     const maxStartTime = end - itemDuration;
     const itemStart = Math.floor(
@@ -83,6 +80,5 @@ export function generateRandomItems(
     });
   }
 
-  // Sort items by start time for more realistic representation
   return ganttItems.sort((a, b) => a.timeRange.start - b.timeRange.start);
 }

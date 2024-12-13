@@ -1,13 +1,13 @@
 import { getTimeSequence, TimeRange, TimeUnit } from "./utils/getTimeSequence";
 import classes from "./Gantt.module.scss";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useDraggable } from "react-use-draggable-scroll";
 import classNames from "classnames";
 import { isCurrent } from "./utils/isCurrent";
 import { TimeDisplay } from "./TimeDisplay";
 import { useElementWidth } from "./hooks/useElementWidth";
 import { roundTimeRange } from "./utils/roundTimeRange";
-import { getSubrows } from "./utils/groupItemsWithNoOverlap";
+import { getSubrows } from "./utils/getSubrows";
 
 export type GanttItem = {
   timeRange: TimeRange;
@@ -16,22 +16,31 @@ export type GanttItem = {
 };
 
 type GanttProps = {
+  controlRef: any;
   timeRange: TimeRange;
   items: GanttItem[];
   timeUnit: TimeUnit;
-  unitWidth?: number;
   colWidth?: number;
+  firstColWidth?: number;
+};
+
+export type GanttApi = {
+  scrollToNow: () => void;
 };
 
 export const Gantt = ({
+  controlRef = useRef<GanttApi | undefined>(),
   timeRange,
   items,
   timeUnit,
-  colWidth = 80,
+  firstColWidth = 120,
+  colWidth = 120,
 }: GanttProps) => {
   timeRange = roundTimeRange(timeRange, timeUnit);
+
   const ganttRef = useRef();
   const canvasRef = useRef();
+  const { elementWidth: ganttWidth } = useElementWidth({ ref: ganttRef });
   const { elementWidth: canvasWidth } = useElementWidth({ ref: canvasRef });
   const scale = (timeRange.end - timeRange.start) / canvasWidth;
   const { events: canvasDraggableEventHandlers } = useDraggable(
@@ -44,6 +53,15 @@ export const Gantt = ({
 
   const toPx = (time: number) => {
     return (time - timeRange.start) / scale;
+  };
+
+  controlRef.current = {
+    scrollToNow: () => {
+      (ganttRef.current as any).scrollLeft = Math.max(
+        0,
+        toPx(Date.now()) - (ganttWidth - firstColWidth) / 2
+      );
+    },
   };
 
   const groupedByType = items.reduce((acc, item) => {
@@ -59,9 +77,9 @@ export const Gantt = ({
   return (
     <div
       ref={ganttRef as any}
-      className={classes.grid}
+      className={classes.gantt}
       style={{
-        gridTemplateColumns: `repeat(${
+        gridTemplateColumns: `${firstColWidth}px repeat(${
           timeSequence.length + 1
         }, ${colWidth}px)`,
       }}

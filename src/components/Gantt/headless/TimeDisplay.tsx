@@ -1,12 +1,14 @@
-import React from "react";
-import { TimeUnit } from "./utils/getTimeSequence";
+import React, { useContext } from "react";
+import { TimeUnit } from "../utils/getTimeSequence";
+import { GanttContext } from "./Gantt";
 
 interface TimeDisplayProps {
   time: number;
-  timeUnit: TimeUnit;
 }
 
-export const TimeDisplay: React.FC<TimeDisplayProps> = ({ time, timeUnit }) => {
+export const TimeDisplay: React.FC<TimeDisplayProps> = ({ time }) => {
+  const { timeUnit } = useContext(GanttContext);
+
   const formatTime = (date: Date) => {
     switch (timeUnit) {
       case TimeUnit.Hour:

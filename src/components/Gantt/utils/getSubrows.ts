@@ -1,4 +1,4 @@
-import { GanttItem } from "../Gantt";
+import { GanttItem } from "../__Gantt";
 import { TimeRange } from "./getTimeSequence";
 
 export function isOverlapping(range1: TimeRange, range2: TimeRange): boolean {

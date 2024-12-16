@@ -1,10 +1,9 @@
 import { getTimeSequence, TimeRange, TimeUnit } from "./utils/getTimeSequence";
 import classes from "./Gantt.module.scss";
-import { useRef } from "react";
+import { MutableRefObject, useRef } from "react";
 import { useDraggable } from "react-use-draggable-scroll";
 import classNames from "classnames";
 import { isCurrent } from "./utils/isCurrent";
-import { TimeDisplay } from "./TimeDisplay";
 import { useElementWidth } from "./hooks/useElementWidth";
 import { roundTimeRange } from "./utils/roundTimeRange";
 import { getSubrows } from "./utils/getSubrows";
@@ -14,14 +13,16 @@ export type GanttItem = {
   type: string;
 };
 
-type GanttProps<T> = {
-  controlRef: any;
+type GanttProps<T extends GanttItem> = {
+  apiRef: MutableRefObject<GanttApi | undefined>;
   timeRange: TimeRange;
   items: T[];
   timeUnit: TimeUnit;
-  colWidth?: number;
-  firstColWidth?: number;
+  topHeaderWidth?: number;
+  leftHeaderWidth?: number;
   ItemComponent: React.FC<{ item: T }>;
+  TopHeaderComponent: React.FC<{ time: number; unit: TimeUnit }>;
+  LeftHeaderComponent: React.FC<{ type: string }>;
 };
 
 export type GanttApi = {
@@ -29,13 +30,15 @@ export type GanttApi = {
 };
 
 export function Gantt<T extends GanttItem>({
-  controlRef = useRef<GanttApi | undefined>(),
+  apiRef = useRef<GanttApi | undefined>(),
   timeRange,
   items,
   timeUnit,
-  firstColWidth = 120,
-  colWidth = 120,
+  topHeaderWidth = 120,
+  leftHeaderWidth = 120,
   ItemComponent,
+  TopHeaderComponent,
+  LeftHeaderComponent,
 }: GanttProps<T>) {
   timeRange = roundTimeRange(timeRange, timeUnit);
 
@@ -50,17 +53,18 @@ export function Gantt<T extends GanttItem>({
       decayRate: 0,
     }
   );
+  useDraggable(ganttRef as any);
   const timeSequence = getTimeSequence(timeRange, timeUnit);
 
   const toPx = (time: number) => {
     return (time - timeRange.start) / scale;
   };
 
-  controlRef.current = {
+  apiRef.current = {
     scrollToNow: () => {
       (ganttRef.current as any).scrollLeft = Math.max(
         0,
-        toPx(Date.now()) - (ganttWidth - firstColWidth) / 2
+        toPx(Date.now()) - (ganttWidth - leftHeaderWidth) / 2
       );
     },
   };
@@ -80,9 +84,7 @@ export function Gantt<T extends GanttItem>({
       ref={ganttRef as any}
       className={classes.gantt}
       style={{
-        gridTemplateColumns: `${firstColWidth}px repeat(${
-          timeSequence.length + 1
-        }, ${colWidth}px)`,
+        gridTemplateColumns: `${leftHeaderWidth}px repeat(${timeSequence.length}, ${topHeaderWidth}px)`,
       }}
       {...canvasDraggableEventHandlers}
     >
@@ -94,16 +96,16 @@ export function Gantt<T extends GanttItem>({
       {timeSequence.map((time, x) => {
         return (
           <div
-            key={`rowHeader-${x}`}
+            key={`topHeader-${x}`}
             className={classNames(
-              classes.rowHeader,
+              classes.topHeader,
               isCurrent(time, timeUnit) && classes.now
             )}
             style={{
               gridArea: `1 / ${x + 2} / 1 / ${x + 2}`,
             }}
           >
-            <TimeDisplay time={time} timeUnit={timeUnit} />
+            <TopHeaderComponent time={time} unit={timeUnit} />
           </div>
         );
       })}
@@ -111,11 +113,11 @@ export function Gantt<T extends GanttItem>({
       {Object.keys(groupedByType).map((type, y) => {
         return (
           <div
-            key={`colHeader-${type}`}
-            className={classes.colHeader}
+            key={`leftHeader-${type}`}
+            className={classes.leftHeader}
             style={{ gridArea: `${y + 2} / 1 / ${y + 2} / 1` }}
           >
-            {type}
+            <LeftHeaderComponent type={type} />
           </div>
         );
       })}
@@ -153,13 +155,13 @@ export function Gantt<T extends GanttItem>({
             {subrows.map((subrow, index) => {
               return (
                 <div key={`subrow-${index}`} className={classes.subrow}>
-                  {subrow.map((item) => {
+                  {subrow.map((item, subindex) => {
                     const start = toPx(item.timeRange.start);
                     const end = toPx(item.timeRange.end);
 
                     return (
                       <div
-                        key={`item-${type}-${index}`}
+                        key={`item-${type}-${index}-${subindex}`}
                         className={classes.item}
                         style={{
                           left: start,

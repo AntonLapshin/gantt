@@ -1,19 +1,23 @@
 import "./App.css";
+import {
+  DAY,
+  TimeUnit,
+  useGantt,
+  useDraggableScroll,
+  Gantt,
+  Cell0,
+  TopHeader,
+  TimeDisplay,
+  LeftHeader,
+  getSubrows,
+  Row,
+  Subrow,
+  Item,
+  Cell,
+  Timeline,
+} from "./components/Gantt";
+import { GanttItem } from "./components/Gantt/types";
 import { generateRandomItems } from "./generateRandomItems";
-import { TimeDisplay } from "./components/Gantt/components/TimeDisplay";
-import { useGantt } from "./components/Gantt/hooks/useGantt";
-import { Gantt } from "./components/Gantt/components/Gantt";
-import { TopHeader } from "./components/Gantt/components/TopHeader";
-import { LeftHeader } from "./components/Gantt/components/LeftHeader";
-import { Row } from "./components/Gantt/components/Row";
-import { getSubrows } from "./components/Gantt/utils/getSubrows";
-import { Subrow } from "./components/Gantt/components/Subrow";
-import { Item } from "./components/Gantt/components/Item";
-import { useDraggableScroll } from "./components/Gantt/hooks/useDraggableScroll";
-import { DAY, GanttItem, TimeUnit } from "./components/Gantt/types";
-import { Timeline } from "./components/Gantt/components/Timeline";
-import { Cell0 } from "./components/Gantt/components/Cell0";
-import { Cell } from "./components/Gantt/components/Cell";
 import { useState } from "react";
 
 const timeRange = {

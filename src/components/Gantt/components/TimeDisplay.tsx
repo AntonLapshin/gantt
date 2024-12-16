@@ -36,7 +36,7 @@ export const TimeDisplay: React.FC<TimeDisplayProps> = ({ time }) => {
         return `${startOfWeek.toLocaleString("en-US", {
           month: "short",
           day: "numeric",
-        })} - ${endOfWeek.toLocaleString("en-US", {
+        })} — ${endOfWeek.toLocaleString("en-US", {
           month: "short",
           day: "numeric",
         })}`;

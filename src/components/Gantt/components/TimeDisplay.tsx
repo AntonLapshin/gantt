@@ -52,5 +52,5 @@ export const TimeDisplay: React.FC<TimeDisplayProps> = ({ time }) => {
     }
   };
 
-  return <div className="time-display">{formatTime(new Date(time))}</div>;
+  return formatTime(new Date(time));
 };

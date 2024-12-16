@@ -1,29 +1,31 @@
 import { PropsWithChildren, useContext } from "react";
-import { isCurrent } from "../utils/isCurrent";
 import classes from "./Gantt.module.scss";
-import classNames from "classnames";
 import { GanttContext } from "./Gantt";
+import classNames from "classnames";
+import { isCurrent } from "../utils/isCurrent";
 
-type TopHeaderProps = {
-  time: number;
+type CellProps = {
   x: number;
+  y: number;
+  time: number;
   className?: string;
 };
 
-export const TopHeader = ({
-  time,
+export const Cell = ({
   x,
+  y,
+  time,
   className,
   children,
-}: PropsWithChildren<TopHeaderProps>) => {
+}: PropsWithChildren<CellProps>) => {
   const { timeUnit } = useContext(GanttContext);
 
   return (
     <div
-      className={classNames(classes.topHeader, className)}
+      className={classNames(classes.cell, className)}
       data-now={isCurrent(time, timeUnit)}
       style={{
-        gridArea: `1 / ${x + 2} / 1 / ${x + 2}`,
+        gridArea: `${y + 2} / ${x + 2} / ${y + 2} / ${x + 2}`,
       }}
     >
       {children}

@@ -14,6 +14,7 @@ import { DAY, GanttItem, TimeUnit } from "./components/Gantt/types";
 import { Timeline } from "./components/Gantt/components/Timeline";
 import { Cell0 } from "./components/Gantt/components/Cell0";
 import { Cell } from "./components/Gantt/components/Cell";
+import { useState } from "react";
 
 const timeRange = {
   start: new Date().getTime() - 10 * DAY,
@@ -27,9 +28,12 @@ export type Item = GanttItem & {
 const items: Item[] = generateRandomItems(timeRange, 150);
 
 function App() {
+  const [selectedTimeUnit, setSelectedTimeUnit] = useState<TimeUnit>(
+    TimeUnit.Day
+  );
   const { ganttRef, canvasRef, apiRef, timeSequence, toPx } = useGantt({
     timeRange,
-    timeUnit: TimeUnit.Day,
+    timeUnit: selectedTimeUnit,
     leftHeaderWidth: 120,
   });
 
@@ -53,7 +57,7 @@ function App() {
         leftHeaderWidth={120}
         topHeaderWidth={120}
         timeSequence={timeSequence}
-        timeUnit={TimeUnit.Day}
+        timeUnit={selectedTimeUnit}
         leftHeaderCount={leftHeaders.length}
         toPx={toPx}
       >
@@ -111,11 +115,22 @@ function App() {
         })}
         <Timeline>
           <div
-            style={{ height: "100%", width: "2px", backgroundColor: "#3295ff" }}
+            style={{ height: "100%", width: "2px", backgroundColor: "tomato" }}
           ></div>
         </Timeline>
       </Gantt>
       <button onClick={() => apiRef.current?.scrollToNow()}>To Now</button>
+      <div>
+        <select
+          value={selectedTimeUnit}
+          onChange={(e) => setSelectedTimeUnit(+e.target.value)}
+        >
+          <option value={TimeUnit.Hour}>Hour</option>
+          <option value={TimeUnit.Day}>Day</option>
+          <option value={TimeUnit.Week}>Week</option>
+          <option value={TimeUnit.Month}>Month</option>
+        </select>
+      </div>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { Item } from "./App";
-import { TimeRange } from "./components/Gantt/utils/getTimeSequence";
+import { TimeRange } from "./components/Gantt/types";
 
 const TYPES = [
   "Everyone",

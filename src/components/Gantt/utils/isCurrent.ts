@@ -1,4 +1,4 @@
-import { TimeUnit } from "./getTimeSequence";
+import { TimeUnit } from "../types";
 
 export function isCurrent(time: number, timeUnit: TimeUnit): boolean {
   const inputDate = new Date(time);

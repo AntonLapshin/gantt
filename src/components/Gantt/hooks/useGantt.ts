@@ -1,8 +1,8 @@
 import { useRef } from "react";
-import { getTimeSequence, TimeRange, TimeUnit } from "../utils/getTimeSequence";
-import { useElementWidth } from "../hooks/useElementWidth";
-import { GanttApi } from "../__Gantt";
+import { getTimeSequence } from "../utils/getTimeSequence";
+import { useElementWidth } from "./useElementWidth";
 import { roundTimeRange } from "../utils/roundTimeRange";
+import { GanttApi, TimeRange, TimeUnit } from "../types";
 
 type UseGanttProps = {
   timeRange: TimeRange;

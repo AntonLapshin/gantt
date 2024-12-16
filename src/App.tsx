@@ -1,17 +1,16 @@
 import "./App.css";
 import { generateRandomItems } from "./generateRandomItems";
-import { DAY, HOUR, TimeUnit } from "./components/Gantt/utils/getTimeSequence";
-import { TimeDisplay } from "./components/Gantt/headless/TimeDisplay";
-import { useGantt } from "./components/Gantt/headless/useGantt";
-import { GanttItem } from "./components/Gantt/__Gantt";
-import { Gantt } from "./components/Gantt/headless/Gantt";
-import { TopHeader } from "./components/Gantt/headless/TopHeader";
-import { LeftHeader } from "./components/Gantt/headless/LeftHeader";
-import { Row } from "./components/Gantt/headless/Row";
+import { TimeDisplay } from "./components/Gantt/components/TimeDisplay";
+import { useGantt } from "./components/Gantt/hooks/useGantt";
+import { Gantt } from "./components/Gantt/components/Gantt";
+import { TopHeader } from "./components/Gantt/components/TopHeader";
+import { LeftHeader } from "./components/Gantt/components/LeftHeader";
+import { Row } from "./components/Gantt/components/Row";
 import { getSubrows } from "./components/Gantt/utils/getSubrows";
-import { Subrow } from "./components/Gantt/headless/Subrow";
-import { Item } from "./components/Gantt/headless/Item";
+import { Subrow } from "./components/Gantt/components/Subrow";
+import { Item } from "./components/Gantt/components/Item";
 import { useDraggableScroll } from "./components/Gantt/hooks/useDraggableScroll";
+import { DAY, GanttItem, TimeUnit } from "./components/Gantt/types";
 
 const timeRange = {
   start: new Date().getTime() - 10 * DAY,
@@ -22,7 +21,7 @@ export type Item = GanttItem & {
   value: string;
 };
 
-const items: Item[] = generateRandomItems(timeRange, 1);
+const items: Item[] = generateRandomItems(timeRange, 150);
 
 function App() {
   const { ganttRef, canvasRef, apiRef, timeSequence, toPx } = useGantt({

@@ -1,7 +1,7 @@
 import { PropsWithChildren, useContext } from "react";
 import classes from "./Gantt.module.scss";
-import { TimeRange } from "../utils/getTimeSequence";
 import { GanttContext } from "./Gantt";
+import { TimeRange } from "../types";
 
 type ItemProps = {
   timeRange: TimeRange;

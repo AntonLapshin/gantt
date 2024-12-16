@@ -1,20 +1,4 @@
-export enum TimeUnit {
-  Hour,
-  Day,
-  Week,
-  Month,
-}
-
-export type TimeRange = {
-  start: number;
-  end: number;
-};
-
-export const MINUTE = 60 * 1000;
-export const HOUR = 60 * MINUTE;
-export const DAY = 24 * HOUR;
-export const WEEK = 7 * DAY;
-export const MONTH = 30 * DAY;
+import { TimeRange, TimeUnit } from "../types";
 
 export function getTimeSequence(
   timeRange: TimeRange,

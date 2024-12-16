@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { TimeUnit } from "../utils/getTimeSequence";
 import { GanttContext } from "./Gantt";
+import { TimeUnit } from "../types";
 
 interface TimeDisplayProps {
   time: number;

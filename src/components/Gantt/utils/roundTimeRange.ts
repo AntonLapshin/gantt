@@ -1,4 +1,4 @@
-import { TimeRange, TimeUnit } from "./getTimeSequence";
+import { TimeRange, TimeUnit } from "../types";
 
 export function roundTimeRange(
   timeRange: TimeRange,

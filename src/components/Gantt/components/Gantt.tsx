@@ -2,7 +2,7 @@ import classes from "./Gantt.module.scss";
 import { createContext, PropsWithChildren } from "react";
 import { isCurrent } from "../utils/isCurrent";
 import classNames from "classnames";
-import { TimeUnit } from "../utils/getTimeSequence";
+import { TimeUnit } from "../types";
 
 type GanttProps = {
   ganttRef: React.RefObject<HTMLDivElement>;

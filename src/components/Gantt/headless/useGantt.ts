@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { getTimeSequence, TimeRange, TimeUnit } from "../utils/getTimeSequence";
 import { useElementWidth } from "../hooks/useElementWidth";
 import { GanttApi } from "../__Gantt";
+import { roundTimeRange } from "../utils/roundTimeRange";
 
 type UseGanttProps = {
   timeRange: TimeRange;
@@ -14,6 +15,7 @@ export const useGantt = ({
   timeUnit,
   leftHeaderWidth,
 }: UseGanttProps) => {
+  timeRange = roundTimeRange(timeRange, timeUnit);
   const ganttRef = useRef<HTMLDivElement | undefined>();
   const canvasRef = useRef<HTMLDivElement | undefined>();
   const apiRef = useRef<GanttApi | undefined>();

@@ -1,4 +1,3 @@
-import { useDraggable } from "react-use-draggable-scroll";
 import classes from "./Gantt.module.scss";
 import { createContext, PropsWithChildren } from "react";
 import { isCurrent } from "../utils/isCurrent";
@@ -33,15 +32,6 @@ export const Gantt = ({
   children,
   toPx,
 }: PropsWithChildren<GanttProps>) => {
-  const { events: canvasDraggableEventHandlers } = useDraggable(
-    ganttRef as any,
-    {
-      decayRate: 0,
-    }
-  );
-
-  console.debug({ leftHeaderCount });
-
   const timelineLeft = toPx(Date.now());
 
   return (
@@ -58,7 +48,6 @@ export const Gantt = ({
         style={{
           gridTemplateColumns: `${leftHeaderWidth}px repeat(${timeSequence.length}, ${topHeaderWidth}px)`,
         }}
-        {...canvasDraggableEventHandlers}
       >
         <div
           className={classes.cell0}

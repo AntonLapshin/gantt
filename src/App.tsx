@@ -11,9 +11,10 @@ import { Row } from "./components/Gantt/headless/Row";
 import { getSubrows } from "./components/Gantt/utils/getSubrows";
 import { Subrow } from "./components/Gantt/headless/Subrow";
 import { Item } from "./components/Gantt/headless/Item";
+import { useDraggableScroll } from "./components/Gantt/hooks/useDraggableScroll";
 
 const timeRange = {
-  start: new Date().getTime() - 1 * DAY,
+  start: new Date().getTime() - 10 * DAY,
   end: new Date().getTime() + 10 * DAY,
 };
 
@@ -21,7 +22,7 @@ export type Item = GanttItem & {
   value: string;
 };
 
-const items: Item[] = generateRandomItems(timeRange, 45);
+const items: Item[] = generateRandomItems(timeRange, 1);
 
 function App() {
   const { ganttRef, canvasRef, apiRef, timeSequence, toPx } = useGantt({
@@ -29,6 +30,8 @@ function App() {
     timeUnit: TimeUnit.Day,
     leftHeaderWidth: 120,
   });
+
+  useDraggableScroll(ganttRef as any);
 
   const groupedByType = items.reduce((acc, item) => {
     if (!acc[item.type]) {

@@ -12,7 +12,6 @@ export type TimeRange = {
 
 export type GanttItem = {
   timeRange: TimeRange;
-  type: string;
 };
 
 export const MINUTE = 60 * 1000;

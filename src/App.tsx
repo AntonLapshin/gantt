@@ -32,6 +32,7 @@ const timeRange = {
 
 export type Item = GanttItem & {
   value: string;
+  type: string;
 };
 
 const items: Item[] = generateRandomItems(timeRange, 1000);

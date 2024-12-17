@@ -16,42 +16,68 @@ import {
   Cell,
   Timeline,
 } from "./components/Gantt";
+import { useVisibleTimeRange } from "./components/Gantt/hooks/useVisibleTimerange";
 import { GanttItem } from "./components/Gantt/types";
+import {
+  isItemOutsideOfTimeRange,
+  isTimeOutsideOfTimeRange,
+} from "./components/Gantt/utils/timeRange";
 import { generateRandomItems } from "./generateRandomItems";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 const timeRange = {
-  start: new Date().getTime() - 15 * DAY,
-  end: new Date().getTime() + 15 * DAY,
+  start: new Date().getTime() - 30 * DAY,
+  end: new Date().getTime() + 30 * DAY,
 };
 
 export type Item = GanttItem & {
   value: string;
 };
 
-const items: Item[] = generateRandomItems(timeRange, 150);
+const items: Item[] = generateRandomItems(timeRange, 1000);
 
 function App() {
   const [selectedTimeUnit, setSelectedTimeUnit] = useState<TimeUnit>(
     TimeUnit.Day
   );
-  const { ganttRef, canvasRef, apiRef, timeSequence, toPx } = useGantt({
+  const {
+    ganttRef,
+    canvasRef,
+    canvasWidth,
+    apiRef,
+    timeSequence,
+    toPx,
+    toTime,
+    visibleCanvasWidth,
+  } = useGantt({
     timeRange,
     timeUnit: selectedTimeUnit,
     leftHeaderWidth: 120,
   });
 
+  const visibleTimeRange = useVisibleTimeRange({
+    toTime,
+    canvasWidth,
+    visibleCanvasWidth,
+    ganttRef: ganttRef as any,
+  });
+
   useDraggableScroll(ganttRef as any);
 
-  const groupedByType = items.reduce((acc, item) => {
-    if (!acc[item.type]) {
-      acc[item.type] = [];
-    }
-    acc[item.type].push(item);
-    return acc;
-  }, {} as Record<string, Item[]>);
+  const groupedByType = useMemo(() => {
+    return items.reduce((acc, item) => {
+      if (!acc[item.type]) {
+        acc[item.type] = [];
+      }
+      acc[item.type].push(item);
+      return acc;
+    }, {} as Record<string, Item[]>);
+  }, [items]);
 
-  const leftHeaders = Object.keys(groupedByType);
+  const leftHeaders = useMemo(
+    () => Object.keys(groupedByType),
+    [groupedByType]
+  );
 
   return (
     <div
@@ -91,6 +117,9 @@ function App() {
         >
           <Cell0 className="cell0" />
           {timeSequence.map((time, x) => {
+            if (isTimeOutsideOfTimeRange(time, visibleTimeRange)) {
+              return null;
+            }
             return (
               <TopHeader key={time} time={time} x={x} className="topHeader">
                 <div style={{ padding: "0.5rem 1rem" }}>
@@ -114,6 +143,14 @@ function App() {
                   return (
                     <Subrow key={index} className="subrow">
                       {subrow.map((item, index) => {
+                        if (
+                          isItemOutsideOfTimeRange(
+                            item.timeRange,
+                            visibleTimeRange
+                          )
+                        ) {
+                          return null;
+                        }
                         return (
                           <Item
                             key={index}
@@ -131,6 +168,9 @@ function App() {
             );
           })}
           {timeSequence.map((time, x) => {
+            if (isTimeOutsideOfTimeRange(time, visibleTimeRange)) {
+              return null;
+            }
             return [
               ...new Array(leftHeaders.length).fill(0).map((_, y) => {
                 return (

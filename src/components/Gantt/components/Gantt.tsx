@@ -1,5 +1,5 @@
 import classes from "./Gantt.module.scss";
-import { createContext, PropsWithChildren } from "react";
+import { createContext, PropsWithChildren, useMemo } from "react";
 import classNames from "classnames";
 import { TimeUnit } from "../types";
 
@@ -35,13 +35,16 @@ export const Gantt = ({
 }: PropsWithChildren<GanttProps>) => {
   return (
     <GanttContext.Provider
-      value={{
-        timeUnit,
-        toPx,
-        timeSequence,
-        canvasRef,
-        leftHeaderCount,
-      }}
+      value={useMemo(
+        () => ({
+          timeUnit,
+          toPx,
+          timeSequence,
+          canvasRef,
+          leftHeaderCount,
+        }),
+        [timeUnit, toPx, timeSequence, canvasRef, leftHeaderCount]
+      )}
     >
       <div
         ref={ganttRef as any}

@@ -43,6 +43,7 @@
   .row {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 
     .subrow {
       position: relative;

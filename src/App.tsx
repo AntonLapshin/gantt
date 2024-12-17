@@ -115,8 +115,12 @@ function App() {
                     <Subrow key={index} className="subrow">
                       {subrow.map((item, index) => {
                         return (
-                          <Item key={index} timeRange={item.timeRange}>
-                            <div className="item">{item.value}</div>
+                          <Item
+                            key={index}
+                            timeRange={item.timeRange}
+                            className="item"
+                          >
+                            {item.value}
                           </Item>
                         );
                       })}

@@ -49,14 +49,12 @@
       align-items: center;
       display: flex;
       align-items: center;
-      overflow: hidden;
 
       .item {
         cursor: pointer;
         z-index: 2;
         position: absolute;
         height: 100%;
-        overflow: hidden;
       }
     }
   }

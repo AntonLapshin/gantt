@@ -43,6 +43,8 @@ body {
   white-space: nowrap;
   text-overflow: ellipsis;
   height: 100%;
+  overflow: hidden;
+  padding: 0 0.5rem;
 }
 
 .item:hover {

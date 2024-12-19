@@ -18,6 +18,7 @@ body {
 .row {
   gap: 6px;
   padding: 6px 0;
+  border: 2px dashed #f5f5f5;
 }
 
 .subrow {
